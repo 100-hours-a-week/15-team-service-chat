@@ -45,6 +45,8 @@ public enum ErrorCode implements ResponseCode {
 	UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH_UNAUTHORIZED", "인증이 필요합니다."),
 	REFRESH_TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "REFRESH_TOKEN_INVALID", "리프레시 토큰이 유효하지 않습니다."),
 	FORBIDDEN(HttpStatus.FORBIDDEN, "AUTH_FORBIDDEN", "접근 권한이 없습니다."),
+	TOO_MANY_REQUESTS(
+			HttpStatus.TOO_MANY_REQUESTS, "TOO_MANY_REQUESTS", "채팅 요청이 너무 많습니다. 잠시 후 다시 시도해 주세요."),
 	INTERNAL_SERVER_ERROR(
 			HttpStatus.INTERNAL_SERVER_ERROR, "INTERNAL_SERVER_ERROR", "서버 내부 오류가 발생했습니다."),
 	SERVICE_UNAVAILABLE(
