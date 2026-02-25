@@ -3,7 +3,7 @@ os: linux
 
 files:
   - source: .
-    destination: /home/ubuntu/deploy/be
+    destination: /home/ubuntu/deploy/chat
 
 hooks:
   ApplicationStop:
