@@ -32,11 +32,12 @@ public class ChatMessageSubscriber implements MessageListener {
         if (payload == null || payload.chatroomId() == null) {
             return;
         }
-		
-        messagingTemplate.convertAndSend(CHAT_TOPIC_PREFIX + payload.chatroomId(),
-				APIResponse.body(
-						SuccessCode.CHAT_MESSAGE_SENT,
-						new ChatMessageSendResponse(payload.message())));
+
+        messagingTemplate.convertAndSend(
+                CHAT_TOPIC_PREFIX + payload.chatroomId(),
+                APIResponse.body(
+                        SuccessCode.CHAT_MESSAGE_SENT,
+                        new ChatMessageSendResponse(payload.message())));
     }
 
     private ChatBroadcastPayload deserialize(Message message) {

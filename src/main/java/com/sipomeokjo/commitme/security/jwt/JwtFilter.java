@@ -33,7 +33,10 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         if (!accessTokenProvider.validateToken(token)) {
-            log.debug("[JWT] invalid token method={} uri={}", request.getMethod(), request.getRequestURI());
+            log.debug(
+                    "[JWT] invalid token method={} uri={}",
+                    request.getMethod(),
+                    request.getRequestURI());
             filterChain.doFilter(request, response);
             return;
         }

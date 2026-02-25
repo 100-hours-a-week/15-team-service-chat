@@ -46,9 +46,7 @@ public class ChatMessageRateLimiter {
             throw e;
         } catch (Exception e) {
             log.warn(
-                    "[ChatRateLimit] 제한 검사 실패 userId={} 사유={} (fail-open)",
-                    userId,
-                    e.getMessage());
+                    "[ChatRateLimit] 제한 검사 실패 userId={} 사유={} (fail-open)", userId, e.getMessage());
         }
     }
 }
