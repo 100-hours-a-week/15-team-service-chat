@@ -47,6 +47,7 @@ public class ChatMessageCommandService {
     private final S3UploadService s3UploadService;
     private final UserRepository userRepository;
     private final ChatMessageMongoMapper chatMessageMongoMapper;
+    private final ChatMessageRateLimiter chatMessageRateLimiter;
     private final Clock clock;
 
     public ChatMessageResponse sendMessage(
@@ -54,6 +55,8 @@ public class ChatMessageCommandService {
         if (userId == null) {
             throw new BusinessException(ErrorCode.UNAUTHORIZED);
         }
+        chatMessageRateLimiter.validateSendMessageRateLimit(userId);
+
         Chatroom chatroom =
                 chatroomRepository
                         .findById(chatroomId)

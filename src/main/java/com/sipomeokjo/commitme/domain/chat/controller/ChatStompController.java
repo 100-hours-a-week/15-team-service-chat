@@ -23,8 +23,11 @@ public class ChatStompController {
             ChatMessageSendRequest request,
             Principal principal) {
         Long userId = resolveUserId(principal);
-        
-        chatMessagePublisher.publish(new ChatBroadcastPayload(chatroomId, chatMessageCommandService.sendMessage(chatroomId, userId, request)));
+
+        chatMessagePublisher.publish(
+                new ChatBroadcastPayload(
+                        chatroomId,
+                        chatMessageCommandService.sendMessage(chatroomId, userId, request)));
     }
 
     private Long resolveUserId(Principal principal) {
