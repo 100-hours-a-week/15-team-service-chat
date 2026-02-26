@@ -94,6 +94,19 @@ app:
     secret-key: "${S3_SECRET_KEY}"
     cdn-base-url: "https://cdn.commit-me.com"
     presign-duration-minutes: 30
+  chat:
+    rate-limit:
+      enabled: true
+      max-requests: 20
+      window: 10s
+      key-prefix: ":chat:dev:rate-limit:send"
+    observability:
+      datasource-proxy:
+        enabled: true
+        slow-query-threshold: 200ms
+        proxy-name: chat-data-source-proxy
+        datasource-tag: chat-mysql
+        slow-query-log-enabled: true
   loadtest:
     enabled: false
 
@@ -103,6 +116,30 @@ security:
     access-expiration: 1h
     refresh-expiration: 7d
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - metrics
+          - prometheus
+  endpoint:
+    prometheus:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    enable:
+      hikari: true
+    distribution:
+      percentiles-histogram:
+        jdbc.query.execution: true
     
 YAML
 
