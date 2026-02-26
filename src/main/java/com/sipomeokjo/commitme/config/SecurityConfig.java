@@ -35,6 +35,8 @@ public class SecurityConfig {
                         auth ->
                                 auth.requestMatchers(HttpMethod.OPTIONS, "/**")
                                         .permitAll()
+                                        .requestMatchers("/internal/loadtest/**")
+                                        .denyAll()
                                         .requestMatchers(
                                                 "/actuator/health",
                                                 "/swagger/**",
