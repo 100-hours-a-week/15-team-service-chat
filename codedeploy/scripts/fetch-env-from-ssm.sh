@@ -60,6 +60,9 @@ spring:
     
   flyway:
     enabled: false
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    baseline-version: "20260204.0"
 
   data:
     mongodb:
@@ -91,6 +94,8 @@ app:
     secret-key: "${S3_SECRET_KEY}"
     cdn-base-url: "https://cdn.commit-me.com"
     presign-duration-minutes: 30
+  loadtest:
+    enabled: false
 
 security:
   jwt:
