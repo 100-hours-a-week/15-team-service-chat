@@ -5,6 +5,9 @@ import com.sipomeokjo.commitme.security.jwt.AccessTokenProvider;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -107,11 +110,49 @@ public class WebSocketAuthHandshakeInterceptor implements HandshakeInterceptor {
         if (cookies == null) {
             return null;
         }
-        for (Cookie cookie : cookies) {
-            if (name.equals(cookie.getName())) {
-                return cookie.getValue();
+
+        List<String> candidates =
+                Arrays.stream(cookies)
+                        .filter(cookie -> name.equals(cookie.getName()))
+                        .map(Cookie::getValue)
+                        .filter(value -> !value.isBlank())
+                        .toList();
+
+        if (candidates.isEmpty()) {
+            return null;
+        }
+
+        if (candidates.size() == 1) {
+            return candidates.getFirst();
+        }
+
+        log.debug(
+                "[WebSocket][Handshake] duplicated_cookie name={} count={}",
+                name,
+                candidates.size());
+        return selectLatestIssuedToken(candidates);
+    }
+
+    private String selectLatestIssuedToken(List<String> candidates) {
+        String selectedToken = null;
+        Instant selectedIssuedAt = null;
+
+        for (String candidate : candidates) {
+            if (!accessTokenProvider.validateToken(candidate)) {
+                continue;
+            }
+
+            Instant issuedAt = accessTokenProvider.getIssuedAt(candidate);
+            if (issuedAt == null) {
+                continue;
+            }
+
+            if (selectedToken == null || issuedAt.isAfter(selectedIssuedAt)) {
+                selectedToken = candidate;
+                selectedIssuedAt = issuedAt;
             }
         }
-        return null;
+
+        return selectedToken != null ? selectedToken : candidates.getFirst();
     }
 }
